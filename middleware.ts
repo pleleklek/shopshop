@@ -2,8 +2,9 @@ import { NextResponse, type NextRequest } from "next/server";
 
 // ป้องกันหลังบ้าน /admin ด้วย Basic Auth (ตั้ง ADMIN_USER / ADMIN_PASSWORD)
 export function middleware(req: NextRequest) {
-  const user = process.env.ADMIN_USER || "admin";
-  const pass = process.env.ADMIN_PASSWORD;
+  // trim กันช่องว่าง/ขึ้นบรรทัดที่ติดมาตอนวางค่าใน Vercel
+  const user = process.env.ADMIN_USER?.trim() || "admin";
+  const pass = process.env.ADMIN_PASSWORD?.trim();
   if (!pass) return new NextResponse("กรุณาตั้งค่า ADMIN_PASSWORD", { status: 503 });
 
   const header = req.headers.get("authorization");
